@@ -73,16 +73,20 @@ NOTE: Again, this is assuming that you cloned HelloSally repository
 
 ``` bash
 cd /usr/sdo/bin
-cp <hellosallyrepo_Dir>/open-horizon-integration/hub/oh/sdo/updateIPTable.sh .
+cp <HELLOSALLY-ECC_Dir>/sdo/updateIPTable.sh .
 chmod +x updateIPTable.sh
 ```
 
+#### Unregister the node
+
 Add node unregister script. This is clean all agreements and policies with the management hub.
+
+Edit the script and replace $HZN_AUTH with username:password for your system
 
 ``` bash
 cd /usr/sdo/bin
-cp <hellosallyrepo_Dir>/open-horizon-integration/hub/oh/sdo/unRegisterNodeAndReboot.sh .
-chmod +x unRegisterNodeAndReboot.sh
+cp <HELLOSALLY-ECC_Dir>/sdo/unRegisterNode.sh .
+chmod +x unRegisterNode.sh
 ```
 
 Please note: docker login has to be done manually to pull images from artifactory 
