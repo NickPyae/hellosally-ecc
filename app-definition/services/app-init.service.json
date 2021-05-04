@@ -1,0 +1,26 @@
+{
+    "org": "${HZN_ORG_ID}",
+    "label": "App Init",
+    "description": "HelloSally App Init Service",
+    "documentation": "",
+    "url": "com.eos2git.cec.lab.emc.hellosally.appinit",
+    "version": "0.0.1",
+    "arch": "amd64",
+    "public": false,
+    "sharable": "singleton",
+    "requiredServices": [],
+    "userInput": [],
+    "deployment": {
+      "services": {
+        "app-init": {
+          "image": "amaas-eos-mw1.cec.lab.emc.com:5070/hellosally/app-init:0.0.1",
+          "privileged": false
+        }
+      }
+    },
+    "sync": true,
+    "tmpfs": {
+      "size": 8192000
+    }
+}
+

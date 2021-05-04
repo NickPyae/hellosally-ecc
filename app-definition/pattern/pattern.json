@@ -1,0 +1,19 @@
+{
+    "name": "pattern-hellosally-amd64",
+    "label": "HelloSally services on amd64",
+    "description": "Pattern for hellosally services on amd64",
+    "services": [
+      {
+        "serviceUrl": "com.eos2git.cec.lab.emc.hellosally",
+        "serviceOrgid": "dellsg",
+        "serviceArch": "amd64",
+        "serviceVersions": [
+          {
+            "version": "0.0.1"
+          }
+        ]
+      }
+    ],
+    "userInput": []
+}
+

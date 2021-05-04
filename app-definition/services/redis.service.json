@@ -1,0 +1,32 @@
+{
+    "org": "${HZN_ORG_ID}",
+    "label": "EdgeX Redis",
+    "description": "HelloSally EdgeX Redis Service",
+    "documentation": "",
+    "url": "com.eos2git.cec.lab.emc.hellosally.edgex.redis",
+    "version": "0.0.1",
+    "arch": "amd64",
+    "public": false,
+    "sharable": "singleton",
+    "requiredServices": [],
+    "userInput": [],
+    "deployment": {
+      "services": {
+        "edgex-redis": {
+          "image": "amaas-eos-mw1.cec.lab.emc.com:5070/hellosally/redislabs/redismod:latest",
+          "privileged": true,
+          "binds": ["db-data:/data/db"],
+          "ports": [
+            {
+              "HostPort": "6379:6379/tcp",
+              "HostIP": "0.0.0.0"
+            }
+          ]
+        }
+      }
+    },
+    "sync": true,
+    "tmpfs": {
+      "size": 8192000
+    }
+}

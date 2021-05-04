@@ -1,0 +1,47 @@
+[
+    {
+      "serviceOrgid": "dellsg",
+      "serviceUrl": "com.eos2git.cec.lab.emc.hellosally",
+      "serviceArch": "amd64",
+      "serviceVersionRange": "[0.0.0,INFINITY)",
+      "inputs": [
+        {
+          "name": "KUIPER_IP",
+          "value": "$KUIPER_IP"
+        },
+        {
+          "name": "KUIPER_PORT",
+          "value": "$KUIPER_PORT"
+        },
+        {
+          "name": "INFLUXDB_IP",
+          "value": "$INFLUXDB_IP"
+        },
+        {
+          "name": "INFLUXDB_PORT",
+          "value": "$INFLUXDB_PORT"
+        },
+        {
+          "name": "INFLUXDB_TOKEN",
+          "value": "$INFLUXDB_TOKEN"
+        },
+        {
+          "name": "INFLUXDB_CLOUD_TOKEN",
+          "value": "$INFLUXDB_CLOUD_TOKEN"
+        },
+        {
+          "name": "BUCKET_NAME",
+          "value": "$BUCKET_NAME"
+        },
+        {
+          "name": "REDIS_IP",
+          "value": "$REDIS_IP"
+        },
+        {
+          "name": "REDIS_PORT",
+          "value": "$REDIS_PORT"
+        }
+      ]
+    }
+]
+

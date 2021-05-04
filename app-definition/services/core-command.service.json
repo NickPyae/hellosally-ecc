@@ -1,0 +1,73 @@
+{
+    "org": "${HZN_ORG_ID}",
+    "label": "EdgeX Core Command",
+    "description": "HelloSally EdgeX Core Command Service",
+    "documentation": "",
+    "url": "com.eos2git.cec.lab.emc.hellosally.edgex.corecommand",
+    "version": "0.0.1",
+    "arch": "amd64",
+    "public": false,
+    "sharable": "singleton",
+    "requiredServices": [
+      {
+        "url": "com.eos2git.cec.lab.emc.hellosally.edgex.redis",
+        "version": "0.0.1",
+        "org": "${HZN_ORG_ID}",
+        "versionRange": "[0.0.0,INFINITY)",
+        "arch": "amd64"
+      },
+      {
+        "url": "com.eos2git.cec.lab.emc.hellosally.edgex.coremeta",
+        "version": "0.0.1",
+        "org": "${HZN_ORG_ID}",
+        "versionRange": "[0.0.0,INFINITY)",
+        "arch": "amd64"
+      },
+      {
+        "url": "com.eos2git.cec.lab.emc.hellosally.edgex.coredata",
+        "version": "0.0.1",
+        "org": "${HZN_ORG_ID}",
+        "versionRange": "[0.0.0,INFINITY)",
+        "arch": "amd64"
+      }
+    ],
+    "userInput": [],
+    "deployment": {
+      "services": {
+        "edgex-core-command": {
+          "image": "amaas-eos-mw1.cec.lab.emc.com:5070/hellosally/edgexfoundry/docker-core-command-go:1.3.1",
+          "privileged": true,
+          "environment": [
+            "CLIENTS_COMMAND_HOST=edgex-core-command",
+            "CLIENTS_COREDATA_HOST=edgex-core-data",
+            "CLIENTS_DATA_HOST=edgex-core-data",
+            "CLIENTS_METADATA_HOST=edgex-core-metadata",
+            "CLIENTS_NOTIFICATIONS_HOST=edgex-support-notifications",
+            "CLIENTS_RULESENGINE_HOST=edgex-kuiper",
+            "DATABASES_PRIMARY_HOST=edgex-redis",
+            "EDGEX_SECURITY_SECRET_STORE=false",
+            "REGISTRY_HOST=edgex-core-consul",
+            "SERVICE_HOST=edgex-core-command"
+          ],
+          "binds": [
+            "db-data:/data/db",
+            "log-data:/edgex/logs:rw",
+            "consul-config:/consul/config",
+            "consul-data:/consul/data"
+          ],
+          "command": ["/core-command", "--confdir=/config"],
+          "ports": [
+            {
+              "HostPort": "48082:48082/tcp",
+              "HostIP": "0.0.0.0"
+            }
+          ]
+        }
+      }
+    },
+    "sync": true,
+    "tmpfs": {
+      "size": 8192000
+    }
+}
+

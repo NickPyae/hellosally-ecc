@@ -1,0 +1,66 @@
+{
+    "org": "${HZN_ORG_ID}",
+    "label": "EdgeX Kuiper",
+    "description": "HelloSally EdgeX Kuiper Service",
+    "documentation": "",
+    "url": "com.eos2git.cec.lab.emc.hellosally.edgex.kuiper",
+    "version": "0.0.1",
+    "arch": "amd64",
+    "public": false,
+    "sharable": "singleton",
+    "requiredServices": [
+      {
+        "url": "com.eos2git.cec.lab.emc.hellosally.edgex.redis",
+        "version": "0.0.1",
+        "org": "${HZN_ORG_ID}",
+        "versionRange": "[0.0.0,INFINITY)",
+        "arch": "amd64"
+      },
+      {
+        "url": "com.eos2git.cec.lab.emc.hellosally.edgex.rulesengine",
+        "version": "0.0.1",
+        "org": "${HZN_ORG_ID}",
+        "versionRange": "[0.0.0,INFINITY)",
+        "arch": "amd64"
+      }
+    ],
+    "userInput": [],
+    "deployment": {
+      "services": {
+        "edgex-kuiper": {
+          "image": "amaas-eos-mw1.cec.lab.emc.com:5070/hellosally/emqx/kuiper:1.1.2-alpine",
+          "privileged": true,
+          "environment": [
+            "EDGEX__DEFAULT__PORT=5566",
+            "EDGEX__DEFAULT__PROTOCOL=tcp",
+            "EDGEX__DEFAULT__SERVER=edgex-app-service-configurable-rules-engine",
+            "EDGEX__DEFAULT__SERVICESERVER=http://edgex-core-data:48080",
+            "EDGEX__DEFAULT__TOPIC=rules-events",
+            "KUIPER__BASIC__CONSOLELOG=true",
+            "KUIPER__BASIC__RESTPORT=48075"
+          ],
+          "binds": [
+            "db-data:/data/db",
+            "log-data:/edgex/logs:rw",
+            "consul-config:/consul/config",
+            "consul-data:/consul/data"
+          ],
+          "ports": [
+            {
+              "HostPort": "48075:48075/tcp",
+              "HostIP": "0.0.0.0"
+            },
+            {
+              "HostPort": "20498:20498/tcp",
+              "HostIP": "0.0.0.0"
+            }
+          ]
+        }
+      }
+    },
+    "sync": true,
+    "tmpfs": {
+      "size": 8192000
+    }
+}
+
