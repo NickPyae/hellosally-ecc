@@ -13,7 +13,7 @@
     "deployment": {
       "services": {
         "app-init": {
-          "image": "amaas-eos-mw1.cec.lab.emc.com:5070/hellosally/app-init:0.0.1",
+          "image": "amaas-eos-mw1.cec.lab.emc.com:5070/hellosally/app-init/main:latest",
           "privileged": false
         }
       }
