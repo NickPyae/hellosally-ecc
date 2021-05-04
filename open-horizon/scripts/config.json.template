@@ -46,12 +46,12 @@
       "listen": "http",
       "root": "root",
       "log": "WARN",
-      "password": "Horizon-Rul3s",
+      "password": "",
       "encoded": "$2a$10$Mh5kobwYwN2WE3LcKkpqzeBzV8phhuzZ/xHD2QRwt1uIswAWNpm7K",
       "org": "dellsg",
       "admin": {
         "username": "admin",
-        "password": "adminpw"
+        "password": ""
       }
     },
     "cssdb": {

@@ -48,7 +48,7 @@ EXCHANGE_VERSION := $(shell jq -r '.services.exchange.version' config.json)
 EXCHANGE_ORGANIZATION := $(shell jq -r '.services.exchange.org' config.json)
 EXCHANGE_ROOT := ${HZN_ROOT_ID}/$(shell jq -r '.services.exchange.root' config.json)
 EXCHANGE_ADMIN_USERNAME := $(shell jq -r '.services.exchange.admin.username' config.json)
-EXCHANGE_ADMIN_PASSWORD := $(shell jq -r '.services.exchange.admin.password' config.json)
+EXCHANGE_ADMIN_PASSWORD ?= $(if $(wildcard EXCHANGE_ADMIN_PASSWORD),$(shell cat EXCHANGE_ADMIN_PASSWORD),$(shell jq -r '.services.exchange.admin.password' config.json))
 EXCHANGE_PASSWORD ?= $(if $(wildcard EXCHANGE_PASSWORD),$(shell cat EXCHANGE_PASSWORD),$(shell jq -r '.services.exchange.password' config.json))
 EXCHANGE_PASSWORD_ENCODED := $(shell htpasswd -bnBC 10 "" "${EXCHANGE_PASSWORD}" | tr -d ':\n' | sed 's/$2y/$2a/')
 

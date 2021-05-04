@@ -96,13 +96,13 @@ You will need to resolve this problem before you continue.
 
 Configure environment variables so the Open Horizon hzn CLI can connect to the exchange from Agent VM.
 
-NOTE: Replace `x.x.x.x` with the actual IP address of the machine running the Open Horizon Management Hub Services.
+NOTE: Replace `x.x.x.x` with the actual IP address of the machine running the Open Horizon Management Hub Services. Also, replace `YOUR_EXCHANGE_ADMIN_PASSWORD` with the same password you exported in [Build and Run Open Horizon Management Hub Services](https://eos2git.cec.lab.emc.com/ISG-Edge/hellosally-ecc/blob/main/open-horizon/build-and-run-horizon.md#create-and-persist-environment-variables)
 
 ``` bash
 echo "export HZN_EXCHANGE_URL=http://x.x.x.x:3090/v1" >> ~/.bashrc
 echo "export ORG_ID=dellsg" >> ~/.bashrc
 echo "export HZN_ORG_ID=dellsg" >> ~/.bashrc
-echo "export HZN_EXCHANGE_USER_AUTH=admin:adminpw" >> ~/.bashrc
+echo "export HZN_EXCHANGE_USER_AUTH=admin:YOUR_EXCHANGE_ADMIN_PASSWORD" >> ~/.bashrc
 source ~/.bashrc
 
 hzn exchange user list
