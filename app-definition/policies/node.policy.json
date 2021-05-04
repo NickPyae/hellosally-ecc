@@ -1,0 +1,13 @@
+{
+    "properties": [
+      {
+        "name": "appname",
+        "value": "hellosally"
+      },
+      {
+        "name": "openhorizon.allowPrivileged",
+        "value": true
+      }
+    ]
+}
+

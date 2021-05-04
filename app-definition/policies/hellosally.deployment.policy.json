@@ -1,0 +1,18 @@
+{
+    "label": "HelloSally Policy",
+    "description": "Hellosally Deployment Policy",
+    "service": {
+      "name": "com.eos2git.cec.lab.emc.hellosally",
+      "org": "${HZN_ORG_ID}",
+      "arch": "amd64",
+      "serviceVersions": [
+        {
+          "version": "0.0.1"
+        }
+      ]
+    },
+    "properties": [],
+    "constraints": ["appname == hellosally"],
+    "userInput": []
+}
+

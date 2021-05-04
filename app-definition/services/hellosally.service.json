@@ -1,0 +1,68 @@
+{
+    "org": "${HZN_ORG_ID}",
+    "label": "HelloSally",
+    "description": "HelloSally Service",
+    "documentation": "",
+    "url": "com.eos2git.cec.lab.emc.hellosally",
+    "version": "0.0.1",
+    "arch": "amd64",
+    "public": true,
+    "sharable": "multiple",
+    "requiredServices": [
+      {
+        "url": "com.eos2git.cec.lab.emc.hellosally.edgex.redis",
+        "version": "0.0.1",
+        "org": "${HZN_ORG_ID}",
+        "versionRange": "[0.0.0,INFINITY)",
+        "arch": "amd64"
+      },
+      {
+        "url": "com.eos2git.cec.lab.emc.hellosally.edgex.coremeta",
+        "version": "0.0.1",
+        "org": "${HZN_ORG_ID}",
+        "versionRange": "[0.0.0,INFINITY)",
+        "arch": "amd64"
+      },
+      {
+        "url": "com.eos2git.cec.lab.emc.hellosally.edgex.coredata",
+        "version": "0.0.1",
+        "org": "${HZN_ORG_ID}",
+        "versionRange": "[0.0.0,INFINITY)",
+        "arch": "amd64"
+      },
+      {
+        "url": "com.eos2git.cec.lab.emc.hellosally.edgex.corecommand",
+        "version": "0.0.1",
+        "org": "${HZN_ORG_ID}",
+        "versionRange": "[0.0.0,INFINITY)",
+        "arch": "amd64"
+      },
+      {
+        "url": "com.eos2git.cec.lab.emc.hellosally.edgex.rulesengine",
+        "version": "0.0.1",
+        "org": "${HZN_ORG_ID}",
+        "versionRange": "[0.0.0,INFINITY)",
+        "arch": "amd64"
+      },
+      {
+        "url": "com.eos2git.cec.lab.emc.hellosally.edgex.kuiper",
+        "version": "0.0.1",
+        "org": "${HZN_ORG_ID}",
+        "versionRange": "[0.0.0,INFINITY)",
+        "arch": "amd64"
+      }
+    ],
+    "userInput": [],
+    "deployment": {
+      "services": {
+        "app-init": {
+          "image": "amaas-eos-mw1.cec.lab.emc.com:5070/hellosally/app-init:0.0.1",
+          "privileged": false
+        }
+      }
+    },
+    "sync": true,
+    "tmpfs": {
+      "size": 8192000
+    }
+}

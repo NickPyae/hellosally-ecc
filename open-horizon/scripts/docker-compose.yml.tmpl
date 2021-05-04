@@ -1,0 +1,147 @@
+version: '3'
+
+###
+### VOLUMES
+###
+
+volumes:
+  ${EXCHANGEDB_VOLUME_NAME}:
+  ${CSSDB_VOLUME_NAME}:
+  ${OCS_VOLUME_NAME}:
+
+###
+### NETWORKS
+###
+
+networks:
+  ${HZN_NETWORK}:
+    driver: ${HZN_NETWORK_DRIVER}
+
+###
+### SERVICES
+###
+
+services:
+  ##
+  ## agbot
+  ##
+  agbot:
+    image: ${AGBOT_CONTAINER_IMAGE}:${AGBOT_CONTAINER_TAG}
+    container_name: ${AGBOT_CONTAINER_NAME}
+    privileged: true
+    networks:
+      ${HZN_NETWORK}:
+        aliases: 
+          - ${HZN_NAMESPACE}-agbot-${EXCHANGE_AGBOT_NAME}
+    restart: always
+    ports:
+      - ${AGBOT_PORT}:${AGBOT_PORT}
+    volumes:
+      - ${AGBOT_CONFIG_FILE}:/etc/horizon/anax.json
+    environment:
+      - HZN_VAR_BASE=/home/agbotuser
+      - AGBOT_NAME=${EXCHANGE_AGBOT_NAME}
+      - CSS_URL=${CSS_URL}
+      - EXCH_APP_HOST=${EXCHANGE_URL}
+      - EXCH_ROOTPW=${EXCHANGE_PASSWORD}
+      - HZN_AGBOT_API=${AGBOT_URL}
+      - HZN_DISABLE_IPTABLES_MANIPULATION=true
+  ##
+  ## exchange-api
+  ##
+  exchange-api:
+    image:  ${EXCHANGE_CONTAINER_IMAGE}:${EXCHANGE_CONTAINER_TAG}
+    container_name: ${EXCHANGE_CONTAINER_NAME}
+    ports:
+      - ${EXCHANGE_PORT}:8080
+    networks:
+      ${HZN_NETWORK}:
+        aliases: 
+          - ${HZN_NAMESPACE}-exchange-api
+    volumes:
+      - ${EXCHANGE_CONFIG_FILE}:/etc/horizon/exchange/config.json
+    environment:
+      - EXCHANGE_DB_URL=jdbc:postgresql://${POSTGRES_HOSTNAME}:${POSTGRES_PORT}/${POSTGRES_DATABASE}
+      - EXCHANGE_DB_USER=${POSTGRES_USER}
+      - EXCHANGE_DB_PW=${POSTGRES_PASSWORD}
+      - EXCHANGE_ROOT_PW=${EXCHANGE_PASSWORD}
+  ##
+  ## exchange-db
+  ##
+  exchange-db:
+    image: ${EXCHANGEDB_CONTAINER_IMAGE}:${EXCHANGEDB_CONTAINER_TAG}
+    container_name: ${EXCHANGEDB_CONTAINER_NAME}
+    restart: always
+    volumes:
+      - ${EXCHANGEDB_VOLUME_NAME}:/var/lib/postgresql/data
+    networks:
+      ${HZN_NETWORK}:
+        aliases:
+          - ${HZN_NAMESPACE}-exchange-db
+    environment:
+      - POSTGRES_DB=${EXCHANGEDB_DATABASE}
+      - POSTGRES_USER=${EXCHANGEDB_USER}
+      - POSTGRES_HOST_AUTH_METHOD=trust
+  ##
+  ## css
+  ##
+  css-api:
+    image: ${CSS_CONTAINER_IMAGE}:${CSS_CONTAINER_TAG}
+    container_name: ${CSS_CONTAINER_NAME}
+    restart: always
+    ports:
+      - ${CSS_PORT}:${CSS_PORT}
+    networks:
+      ${HZN_NETWORK}:
+        aliases:
+          - ${HZN_NAMESPACE}-css-api
+    volumes:
+      - ${CSS_CONFIG_DIR}:/etc/edge-sync-service
+      - ${CSSDB_VOLUME_NAME}:/var/wiotp-edge/persist
+    environment:
+      - HZN_EXCHANGE_URL=${EXCHANGE_URL}
+  ##
+  ## css-db
+  ##
+  css-db:
+    image: ${CSSDB_CONTAINER_IMAGE}:${CSSDB_CONTAINER_TAG}
+    container_name: ${CSSDB_CONTAINER_NAME}
+    restart: always
+    volumes:
+      - ${CSSDB_VOLUME_NAME}:/var/wiotp-edge/persist
+    networks:
+      ${HZN_NETWORK}:
+        aliases:
+          - ${HZN_NAMESPACE}-css-db
+  ##
+  ## sdo-owner-services
+  ##
+  sdo-owner-services:
+    image: ${SDO_IMAGE_NAME}:${SDO_IMAGE_TAG}
+    container_name: ${SDO_CONTAINER_NAME}
+    restart: always
+    ports:
+      - ${HZN_LISTEN_IP}:${SDO_OCS_API_PORT}:${SDO_OCS_API_PORT}
+      - ${HZN_LISTEN_IP}:${SDO_RV_PORT}:${SDO_RV_PORT}
+      - ${HZN_LISTEN_IP}:${SDO_OPS_EXTERNAL_PORT}:${SDO_OPS_PORT}
+    networks:
+      ${HZN_NETWORK}:
+        aliases:
+          - ${HZN_NAMESPACE}-sdo-owner-service
+    volumes:
+      - ${OCS_VOLUME_NAME}:${SDO_OCS_DB_PATH}
+    # intentionally omitting HZN_MGMT_HUB_CERT from the environment section, since we use http in this environment
+    environment:
+      - HZN_EXCHANGE_URL=${HZN_TRANSPORT}://${HZN_LISTEN_IP}:${EXCHANGE_PORT}/v1
+      - EXCHANGE_INTERNAL_URL=${HZN_TRANSPORT}://exchange-api:8080/v1
+      - HZN_FSS_CSSURL=${HZN_TRANSPORT}://${HZN_LISTEN_IP}:${CSS_PORT}/
+      - HZN_ORG_ID=${EXCHANGE_USER_ORG}
+      - SDO_OWNER_SVC_HOST=${HZN_LISTEN_IP}
+      - SDO_OCS_API_PORT=${SDO_OCS_API_PORT}
+      - SDO_RV_PORT=${SDO_RV_PORT}
+      - SDO_OPS_PORT=${SDO_OPS_PORT}
+      - SDO_OPS_EXTERNAL_PORT=${SDO_OPS_EXTERNAL_PORT}
+      - SDO_OCS_DB_PATH=${SDO_OCS_DB_PATH}
+      - AGENT_INSTALL_URL=${AGENT_INSTALL_URL}
+    depends_on:
+      - exchange-api
