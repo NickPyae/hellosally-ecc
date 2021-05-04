@@ -2,7 +2,7 @@
 
 ### Create and Persist Environment Variables
 
-Replace all your `YOUR_EXCHANGE_ROOT_PASSWORD` and `YOUR_EXCHANGE_ADMIN_PASSWORD` with correct values before exporting them.
+Replace all your `YOUR_EXCHANGE_ROOT_PASSWORD` and `YOUR_EXCHANGE_ADMIN_PASSWORD` with correct values you like before exporting them.
 
 ``` bash
 export EXCHANGE_PASSWORD=YOUR_EXCHANGE_ROOT_PASSWORD
