@@ -1,0 +1,258 @@
+{
+  "org": "${HZN_ORG_ID}",
+  "label": "HelloSally",
+  "description": "HelloSally Services",
+  "documentation": "",
+  "url": "com.eos2git.cec.lab.emc.hellosally",
+  "version": "0.0.1",
+  "arch": "amd64",
+  "public": true,
+  "sharable": "singleton",
+  "requiredServices": [],
+  "userInput": [
+    {
+      "serviceOrgid": "dellsg",
+      "serviceUrl": "com.eos2git.cec.lab.emc.hellosally",
+      "serviceArch": "amd64",
+      "serviceVersionRange": "[0.0.0,INFINITY)",
+      "inputs": [
+        {
+          "name": "KUIPER_IP",
+          "value": "{{ KUIPER_IP }}"
+        },
+        {
+          "name": "KUIPER_PORT",
+          "value": "{{ KUIPER_PORT }}"
+        },
+        {
+          "name": "INFLUXDB_IP",
+          "value": "{{ INFLUXDB_IP }}"
+        },
+        {
+          "name": "INFLUXDB_PORT",
+          "value": "{{ INFLUXDB_PORT }}"
+        },
+        {
+          "name": "INFLUXDB_TOKEN",
+          "value": "{{ INFLUXDB_TOKEN }}"
+        },
+        {
+          "name": "INFLUXDB_CLOUD_TOKEN",
+          "value": "{{ INFLUXDB_CLOUD_TOKEN }}"
+        },
+        {
+          "name": "BUCKET_NAME",
+          "value": "{{ BUCKET_NAME }}"
+        },
+        {
+          "name": "REDIS_IP",
+          "value": "{{ REDIS_IP }}"
+        },
+        {
+          "name": "REDIS_PORT",
+          "value": "{{ REDIS_PORT }}"
+        }
+      ]
+    }
+  ],
+  "deployment": {
+    "services": {
+      "edgex-redis": {
+        "image": "amaas-eos-mw1.cec.lab.emc.com:5070/hellosally/redislabs/redismod:latest",
+        "privileged": true,
+        "binds": ["db-data:/data/db"],
+        "ports": [
+          {
+            "HostPort": "6379:6379/tcp",
+            "HostIP": "0.0.0.0"
+          }
+        ]
+      },
+      "edgex-core-metadata": {
+        "image": "amaas-eos-mw1.cec.lab.emc.com:5070/hellosally/edgexfoundry/docker-core-metadata-go:1.3.1",
+        "privileged": true,
+        "environment": [
+          "CLIENTS_COMMAND_HOST=edgex-core-command",
+          "CLIENTS_COREDATA_HOST=edgex-core-data",
+          "CLIENTS_DATA_HOST=edgex-core-data",
+          "CLIENTS_METADATA_HOST=edgex-core-metadata",
+          "CLIENTS_NOTIFICATIONS_HOST=edgex-support-notifications",
+          "CLIENTS_RULESENGINE_HOST=edgex-kuiper",
+          "DATABASES_PRIMARY_HOST=edgex-redis",
+          "EDGEX_SECURITY_SECRET_STORE=false",
+          "NOTIFICATIONS_SENDER=edgex-core-metadata",
+          "REGISTRY_HOST=edgex-core-consul",
+          "SERVICE_HOST=edgex-core-metadata"
+        ],
+        "binds": [
+          "db-data:/data/db",
+          "log-data:/edgex/logs:rw",
+          "consul-config:/consul/config",
+          "consul-data:/consul/data"
+        ],
+        "command": ["/core-metadata", "--confdir=/config"],
+        "ports": [
+          {
+            "HostPort": "48081:48081/tcp",
+            "HostIP": "0.0.0.0"
+          }
+        ]
+      },
+      "edgex-core-data": {
+        "image": "amaas-eos-mw1.cec.lab.emc.com:5070/hellosally/edgexfoundry/docker-core-data-go:1.3.1",
+        "privileged": true,
+        "environment": [
+          "CLIENTS_COMMAND_HOST=edgex-core-command",
+          "CLIENTS_COREDATA_HOST=edgex-core-data",
+          "CLIENTS_DATA_HOST=edgex-core-data",
+          "CLIENTS_METADATA_HOST=edgex-core-metadata",
+          "CLIENTS_NOTIFICATIONS_HOST=edgex-support-notifications",
+          "CLIENTS_RULESENGINE_HOST=edgex-kuiper",
+          "DATABASES_PRIMARY_HOST=edgex-redis",
+          "EDGEX_SECURITY_SECRET_STORE=false",
+          "REGISTRY_HOST=edgex-core-consul",
+          "SERVICE_HOST=edgex-core-data"
+        ],
+        "binds": [
+          "db-data:/data/db",
+          "log-data:/edgex/logs:rw",
+          "consul-config:/consul/config",
+          "consul-data:/consul/data"
+        ],
+        "command": ["/core-data", "--confdir=/config"],
+        "ports": [
+          {
+            "HostPort": "48080:48080/tcp",
+            "HostIP": "0.0.0.0"
+          },
+          {
+            "HostPort": "5563:5563/tcp",
+            "HostIP": "0.0.0.0"
+          }
+        ]
+      },
+      "edgex-core-command": {
+        "image": "amaas-eos-mw1.cec.lab.emc.com:5070/hellosally/edgexfoundry/docker-core-command-go:1.3.1",
+        "privileged": true,
+        "environment": [
+          "CLIENTS_COMMAND_HOST=edgex-core-command",
+          "CLIENTS_COREDATA_HOST=edgex-core-data",
+          "CLIENTS_DATA_HOST=edgex-core-data",
+          "CLIENTS_METADATA_HOST=edgex-core-metadata",
+          "CLIENTS_NOTIFICATIONS_HOST=edgex-support-notifications",
+          "CLIENTS_RULESENGINE_HOST=edgex-kuiper",
+          "DATABASES_PRIMARY_HOST=edgex-redis",
+          "EDGEX_SECURITY_SECRET_STORE=false",
+          "REGISTRY_HOST=edgex-core-consul",
+          "SERVICE_HOST=edgex-core-command"
+        ],
+        "binds": [
+          "db-data:/data/db",
+          "log-data:/edgex/logs:rw",
+          "consul-config:/consul/config",
+          "consul-data:/consul/data"
+        ],
+        "command": ["/core-command", "--confdir=/config"],
+        "ports": [
+          {
+            "HostPort": "48082:48082/tcp",
+            "HostIP": "0.0.0.0"
+          }
+        ]
+      },
+      "edgex-app-service-configurable-rules-engine": {
+        "image": "amaas-eos-mw1.cec.lab.emc.com:5070/hellosally/edgexfoundry/docker-app-service-configurable:1.3.1",
+        "privileged": true,
+        "environment": [
+          "BINDING_PUBLISHTOPIC=rules-events",
+          "CLIENTS_COMMAND_HOST=edgex-core-command",
+          "CLIENTS_COREDATA_HOST=edgex-core-data",
+          "CLIENTS_DATA_HOST=edgex-core-data",
+          "CLIENTS_METADATA_HOST=edgex-core-metadata",
+          "CLIENTS_NOTIFICATIONS_HOST=edgex-support-notifications",
+          "CLIENTS_RULESENGINE_HOST=edgex-kuiper",
+          "CLIENTS_SCHEDULER_HOST=edgex-support-scheduler",
+          "CLIENTS_VIRTUALDEVICE_HOST=edgex-device-virtual",
+          "DATABASES_PRIMARY_HOST=edgex-redis",
+          "EDGEX_PROFILE=rules-engine",
+          "EDGEX_SECURITY_SECRET_STORE=false",
+          "MESSAGEBUS_SUBSCRIBEHOST_HOST=edgex-core-data",
+          "REGISTRY_HOST=edgex-core-consul",
+          "SERVICE_HOST=edgex-app-service-configurable-rules",
+          "SERVICE_PORT=48100"
+        ],
+        "binds": [
+          "db-data:/data/db",
+          "log-data:/edgex/logs:rw",
+          "consul-config:/consul/config",
+          "consul-data:/consul/data"
+        ],
+        "command": ["/app-service-configurable"],
+        "ports": [
+          {
+            "HostPort": "48100:48100/tcp",
+            "HostIP": "0.0.0.0"
+          },
+          {
+            "HostPort": "5566:5566/tcp",
+            "HostIP": "0.0.0.0"
+          }
+        ]
+      },
+      "edgex-kuiper": {
+        "image": "amaas-eos-mw1.cec.lab.emc.com:5070/hellosally/emqx/kuiper:1.1.2-alpine",
+        "privileged": true,
+        "environment": [
+          "EDGEX__DEFAULT__PORT=5566",
+          "EDGEX__DEFAULT__PROTOCOL=tcp",
+          "EDGEX__DEFAULT__SERVER=edgex-app-service-configurable-rules-engine",
+          "EDGEX__DEFAULT__SERVICESERVER=http://edgex-core-data:48080",
+          "EDGEX__DEFAULT__TOPIC=rules-events",
+          "KUIPER__BASIC__CONSOLELOG=true",
+          "KUIPER__BASIC__RESTPORT=48075"
+        ],
+        "binds": [
+          "db-data:/data/db",
+          "log-data:/edgex/logs:rw",
+          "consul-config:/consul/config",
+          "consul-data:/consul/data"
+        ],
+        "ports": [
+          {
+            "HostPort": "48075:48075/tcp",
+            "HostIP": "0.0.0.0"
+          },
+          {
+            "HostPort": "20498:20498/tcp",
+            "HostIP": "0.0.0.0"
+          }
+        ]
+      },
+      "temperature-device-service": {
+        "image": "amaas-eos-mw1.cec.lab.emc.com:5070/hellosally/temperature-device-service/main:latest",
+        "privileged": true,
+        "environment": [
+          "DEVICE_SERVICE_CONFIG={{ DEVICE_SERVICE_JSON }}",
+          "CLIENTS_COMMAND_HOST=edgex-core-command",
+          "CLIENTS_DATA_HOST=edgex-core-data",
+          "CLIENTS_METADATA_HOST=edgex-core-metadata"
+        ],
+        "binds": [],
+        "ports": [
+          {
+            "HostPort": "49989:49989/tcp",
+            "HostIP": "0.0.0.0"
+          }
+        ]
+      },
+      "app-init": {
+        "image": "amaas-eos-mw1.cec.lab.emc.com:5070/hellosally/app-init/main:latest",
+        "privileged": false
+      }
+    }
+  },
+  "sync": true,
+  "tmpfs": {
+    "size": 8192000
+  }
+}
