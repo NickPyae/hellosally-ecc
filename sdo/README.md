@@ -65,6 +65,7 @@ cd /usr/sdo
 vi sdo_to.service
 #Add the below line after ExecStart command as a post processing script
 ExecStartPost=/bin/bash /usr/sdo/bin/updateIPTable.sh
+ExecStartPost=/bin/bash /usr/sdo/bin/updateNodePolicy.sh
 ```
 
 Create the below script to update IP table entry:
@@ -75,6 +76,20 @@ NOTE: Again, this is assuming that you cloned HelloSally repository
 cd /usr/sdo/bin
 cp <HELLOSALLY-ECC_Dir>/sdo/updateIPTable.sh .
 chmod +x updateIPTable.sh
+```
+
+``` bash
+cd /usr/sdo/bin
+cp <HELLOSALLY-ECC_Dir>/sdo/updateNodePolicy.sh .
+cp <HELLOSALLY-ECC_Dir>/sdo/nodePolicy.json
+chmod +x updateNodePolicy.sh
+```
+
+Register the service to start SDO on reboot
+
+``` bash
+cp /usr/sdo/sdo_to.service /lib/systemd/system
+systemctl enable sdo_to.service
 ```
 
 #### Unregister the node
@@ -93,5 +108,13 @@ Please note: docker login has to be done manually to pull images from artifactor
 ```
 docker login -u <SVC-USER> -p <PASSWORD> amaas-eos-mw1.cec.lab.emc.com:5070
 ```
+
+Update docker daemon with the following subnet for docker bridge to use
+
+``` bash
+echo '{
+  "bip": "172.200.0.1/16"
+}' > /etc/docker/daemon.json 
+``` 
 
 The device is ready and reboot now to begin SDO
