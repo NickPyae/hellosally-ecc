@@ -114,7 +114,6 @@ The command will run for a bit, and will pull each container from the container 
 The digest is recorded in the published service definition. Provide your JFrog Artifactory user name and API Key.
 
 ``` bash
-cd app-definition/services
 hzn exchange service publish -P -f hellosally.service.json
 ```
 
