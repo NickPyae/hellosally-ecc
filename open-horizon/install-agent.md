@@ -133,4 +133,4 @@ Once it asks for user name and password, use your service account user name and 
 
 # Next
 
-[Deploy Open Horizon (ECE) Services](./app-definition/README.md).
+[Deploy Open Horizon (ECE) Services](../app-definition/README.md).
