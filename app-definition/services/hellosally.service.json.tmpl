@@ -11,52 +11,44 @@
   "requiredServices": [],
   "userInput": [
     {
-      "serviceOrgid": "dellsg",
-      "serviceUrl": "com.eos2git.cec.lab.emc.hellosally",
-      "serviceArch": "amd64",
-      "serviceVersionRange": "[0.0.0,INFINITY)",
-      "inputs": [
-        {
-          "name": "KUIPER_READING_NAME",
-          "value": "{{ KUIPER_READING_NAME }}"
-        },
-        {
-          "name": "KUIPER_IP",
-          "value": "{{ KUIPER_IP }}"
-        },
-        {
-          "name": "KUIPER_PORT",
-          "value": "{{ KUIPER_PORT }}"
-        },
-        {
-          "name": "INFLUXDB_IP",
-          "value": "{{ INFLUXDB_IP }}"
-        },
-        {
-          "name": "INFLUXDB_PORT",
-          "value": "{{ INFLUXDB_PORT }}"
-        },
-        {
-          "name": "INFLUXDB_TOKEN",
-          "value": "{{ INFLUXDB_TOKEN }}"
-        },
-        {
-          "name": "INFLUXDB_CLOUD_TOKEN",
-          "value": "{{ INFLUXDB_CLOUD_TOKEN }}"
-        },
-        {
-          "name": "BUCKET_NAME",
-          "value": "{{ BUCKET_NAME }}"
-        },
-        {
-          "name": "REDIS_IP",
-          "value": "{{ REDIS_IP }}"
-        },
-        {
-          "name": "REDIS_PORT",
-          "value": "{{ REDIS_PORT }}"
-        }
-      ]
+      "name": "KUIPER_READING_NAME",
+      "defaultValue": "{{ KUIPER_READING_NAME }}"
+    },
+    {
+      "name": "KUIPER_IP",
+      "defaultValue": "{{ KUIPER_IP }}"
+    },
+    {
+      "name": "KUIPER_PORT",
+      "defaultValue": "{{ KUIPER_PORT }}"
+    },
+    {
+      "name": "INFLUXDB_IP",
+      "defaultValue": "{{ INFLUXDB_IP }}"
+    },
+    {
+      "name": "INFLUXDB_PORT",
+      "defaultValue": "{{ INFLUXDB_PORT }}"
+    },
+    {
+      "name": "INFLUXDB_TOKEN",
+      "defaultValue": "{{ INFLUXDB_TOKEN }}"
+    },
+    {
+      "name": "INFLUXDB_CLOUD_TOKEN",
+      "defaultValue": "{{ INFLUXDB_CLOUD_TOKEN }}"
+    },
+    {
+      "name": "BUCKET_NAME",
+      "defaultValue": "{{ BUCKET_NAME }}"
+    },
+    {
+      "name": "REDIS_IP",
+      "defaultValue": "{{ REDIS_IP }}"
+    },
+    {
+      "name": "REDIS_PORT",
+      "defaultValue": "{{ REDIS_PORT }}"
     }
   ],
   "deployment": {
@@ -64,7 +56,9 @@
       "edgex-redis": {
         "image": "amaas-eos-mw1.cec.lab.emc.com:5070/hellosally/redislabs/redismod:latest",
         "privileged": true,
-        "binds": ["db-data:/data/db"],
+        "binds": [
+          "db-data:/data/db"
+        ],
         "ports": [
           {
             "HostPort": "6379:6379/tcp",
@@ -94,7 +88,10 @@
           "consul-config:/consul/config",
           "consul-data:/consul/data"
         ],
-        "command": ["/core-metadata", "--confdir=/config"],
+        "command": [
+          "/core-metadata",
+          "--confdir=/config"
+        ],
         "ports": [
           {
             "HostPort": "48081:48081/tcp",
@@ -123,7 +120,10 @@
           "consul-config:/consul/config",
           "consul-data:/consul/data"
         ],
-        "command": ["/core-data", "--confdir=/config"],
+        "command": [
+          "/core-data",
+          "--confdir=/config"
+        ],
         "ports": [
           {
             "HostPort": "48080:48080/tcp",
@@ -156,7 +156,10 @@
           "consul-config:/consul/config",
           "consul-data:/consul/data"
         ],
-        "command": ["/core-command", "--confdir=/config"],
+        "command": [
+          "/core-command",
+          "--confdir=/config"
+        ],
         "ports": [
           {
             "HostPort": "48082:48082/tcp",
@@ -191,7 +194,9 @@
           "consul-config:/consul/config",
           "consul-data:/consul/data"
         ],
-        "command": ["/app-service-configurable"],
+        "command": [
+          "/app-service-configurable"
+        ],
         "ports": [
           {
             "HostPort": "48100:48100/tcp",

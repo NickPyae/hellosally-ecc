@@ -2,7 +2,7 @@
 
 # Pre-requisites
 
-Before installing HelloSally services, ensure Open Horizon was setup following the instructions from [Open Horizon Setup](https://eos2git.cec.lab.emc.com/ISG-Edge/hellosally-ecc/tree/refactor/hellosally-oh#how-to-install-open-horizon-management-hub-and-agent)
+Before installing HelloSally services, ensure Open Horizon was setup following the instructions from [Open Horizon Setup](https://eos2git.cec.lab.emc.com/ISG-Edge/hellosally-ecc#how-to-install-open-horizon-management-hub-and-agent)
 
 Before we deploy any services using hzn CLI, there are two options:
 
@@ -11,7 +11,7 @@ Before we deploy any services using hzn CLI, there are two options:
 
 For Option 1, you can follow below steps to deploy services from Agent VM.
 
-For Option 2, please follow this guide: [Exposing Open Horizon Agent API to Outside](expose-agent-api.md) and come back here to execute below steps to deploy services from Management Hub VM.
+For Option 2, please follow this guide: [Exposing Open Horizon Agent API to Outside](https://eos2git.cec.lab.emc.com/ISG-Edge/hellosally-ecc/blob/main/open-horizon/expose-agent-api.md) and come back here to execute below steps to deploy services from Management Hub VM.
 
 Next we will publish an example EdgeX service to Open Horizon Management hub and then tell the agent to run the service.
 
@@ -39,7 +39,7 @@ Created keys:
         /root/.hzn/keys/service.public.pem
 ```
 
-## Building hello.service.json
+## Building hellosally.service.json
 
 In order to avoid committing secrets to Git repo, it is required to build the `hellosally.service.json` from the template.  
 This is done in 3 steps:
@@ -49,9 +49,12 @@ This is done in 3 steps:
 
 ### 1. set the environment variables
 
-Edit the `.env` file to set the values that correspond to your environments:
+Create a file called  `.env` file:  
+``` bash
+nano .env
+```
 
-
+And copy the following environment variables with values that correspond to your environment:  
 ``` bash
 export KUIPER_READING_NAME=Temperature
 export KUIPER_IP=x.x.x.x
@@ -68,11 +71,15 @@ export REDIS_PORT=6379
 NOTE: Replace all these values with correct values of kuiper rule engine VM IP, InfluxDB VM IP, authorization header tokens of InfluxDB and InfluxDB Cloud, bucket name as well as Redis VM IP, depending on the labs you are deploying these services whether it is HOP or Franklin. Refer to this [Confluence Page](https://confluence.cec.lab.emc.com/pages/viewpage.action?spaceKey=ISGPDE&title=Technical+Specifications) for Physical View of HOP Lab and Franklin Lab to check IP addresses of KUIPER and REDIS services. KUIPER and REDIS services are part of FarEdge ECE. Please, use IP of ECE for both KUIPER and REDIS.
 
 
-### 2. set the environment variables
+### 2. Edit the device service config file
 
-Edit `device-service.config.json` with the list of temperature sensor devices available in your environment.
-
+Create a new file `device-service.config.json` by copying the sample file provided:  
+``` bash
+cp device-service.sample-config.json device-service.config.json
 ```
+
+And edit `device-service.config.json` with the list of temperature sensor devices available in your environment:  
+``` json
 [
     {
         "name":"Lobby-Temp",
@@ -89,11 +96,11 @@ Edit `device-service.config.json` with the list of temperature sensor devices av
 ]
 ```
 
-### 3. set the environment variables
+### 3. Generate the hellosally.service.json
 
 Once the files `.env` and `device-service.config.json` are ready, build `hellosally.service.json` with the following command:
 
-```
+``` bash
 ./makeService.sh
 ```
 
@@ -106,14 +113,14 @@ Publish the `hellosally.service.json` definition file to the exchange.
 The command will run for a bit, and will pull each container from the container registry so that it can obtain the container digest.
 The digest is recorded in the published service definition. Provide your JFrog Artifactory user name and API Key.
 
-```
+``` bash
 cd app-definition/services
 hzn exchange service publish -P -f hellosally.service.json
 ```
 
 Now check to ensure that the service definition was published and is available in the exchange:
 
-```
+``` bash
 hzn exchange service list
 ```
 
@@ -144,13 +151,13 @@ You can either use one of these approaches to deploy your services to Open Horiz
 Publishing a _pattern_ to the exchange.
 A pattern is the easiest way for a node to indicate which services it should run.
 
-```
+``` bash
 hzn exchange pattern publish -f app-definition/pattern/pattern.json
 ```
 
 Now check to ensure the pattern is available:
 
-```
+``` bash
 hzn exchange pattern list
 ```
 
