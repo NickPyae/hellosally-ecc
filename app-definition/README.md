@@ -53,6 +53,7 @@ Edit the `.env` file to set the values that correspond to your environments:
 
 
 ``` bash
+export KUIPER_READING_NAME=Temperature
 export KUIPER_IP=x.x.x.x
 export KUIPER_PORT=48075
 export INFLUXDB_IP=x.x.x.x 
