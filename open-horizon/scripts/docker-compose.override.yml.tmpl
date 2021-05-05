@@ -1,0 +1,28 @@
+version: '3'
+
+###
+### NETWORKS
+###
+
+networks:
+  ${HZN_NETWORK}:
+    driver: ${HZN_NETWORK_DRIVER}
+
+
+###
+### SERVICES
+###
+
+services:
+  
+  ##
+  ## ecc-gui services  
+  ##
+  eccgui:
+    image: ${ECC_GUI_IMAGE_NAME}:${ECC_GUI_TAG}
+    container_name: ${ECC_GUI_CONTAINER_NAME}
+    restart: always
+    ports:
+      - ${ECC_GUI_PORT}:80
+    networks:
+      ${HZN_NETWORK}:

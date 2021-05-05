@@ -18,6 +18,7 @@ THIS_HOSTIP := $(shell ifconfig | egrep 'inet ' | awk '{ print $$2 }' | egrep -v
 
 ## target outpu
 DOCKER_COMPOSE := ${PWD}/docker-compose.yml
+DOCKER_COMPOSE_OVERRIDE := ${PWD}/docker-compose.override.yml
 
 # exchange root, admin, organization
 HZN_ROOT_ID := $(shell jq -r '.horizon.root' config.json)
@@ -115,6 +116,12 @@ EXCHANGE_USER_ORG := $(shell jq -r '.services.sdo.exchangeUserOrg' config.json)
 AGENT_INSTALL_URL := $(shell jq -r '.services.sdo.agentInstallUrl' config.json)
 OCS_VOLUME_NAME := $(shell jq -r '.services.sdo.ocsVolume' config.json)
 
+## ECC-GUI
+ECC_GUI_IMAGE_NAME := $(shell jq -r '.services.eccgui.image' config.json)
+ECC_GUI_TAG:= $(shell jq -r '.services.eccgui.tag' config.json)
+ECC_GUI_CONTAINER_NAME := $(shell jq -r '.services.eccgui.name' config.json)
+ECC_GUI_PORT:= $(shell jq -r '.services.eccgui.port' config.json)
+
 ## AGBOT
 AGBOT_KEYS_DIR := ${PWD}/certs
 AGBOT_KEYS_KEY := ${AGBOT_KEYS_DIR}/domain.key 
@@ -144,6 +151,7 @@ default: config ${DOCKER_COMPOSE}
 
 CONFIGS := \
 	  ${DOCKER_COMPOSE} \
+	  ${DOCKER_COMPOSE_OVERRIDE} \
 	  ${EXCHANGE_CONFIG_FILE} \
 	  ${CSS_CONFIG_FILE} \
 	  ${AGBOT_CONFIG_FILE}
@@ -258,6 +266,10 @@ ${CONFIGS}: config.json makefile
 	  SDO_OPS_EXTERNAL_PORT='${SDO_OPS_EXTERNAL_PORT}' \
 	  SDO_OPS_PORT='${SDO_OPS_PORT}' \
 	  SDO_OCS_DB_PATH='${SDO_OCS_DB_PATH}' \
+	  ECC_GUI_IMAGE_NAME='${ECC_GUI_IMAGE_NAME}' \
+	  ECC_GUI_TAG='${ECC_GUI_TAG}' \
+	  ECC_GUI_CONTAINER_NAME='${ECC_GUI_CONTAINER_NAME}' \
+	  ECC_GUI_PORT='${ECC_GUI_PORT}' \
 	  HZN_TRANSPORT='${HZN_TRANSPORT}' \
 	  EXCHANGE_USER_ORG='${EXCHANGE_USER_ORG}' \
 	  AGENT_INSTALL_URL='${AGENT_INSTALL_URL}' \
@@ -291,7 +303,7 @@ reset-db:
 	-curl -sLX POST -H "Authorization:Basic ${EXCHANGE_ROOT}:$(EXCHANGE_PASSWORD)" "${EXCHANGE_URL}/admin/initdb" | jq -r '.msg'
 
 clean: remove
-	sudo rm -fr ${DOCKER_COMPOSE} css agbot exchange
+	sudo rm -fr ${DOCKER_COMPOSE} ${DOCKER_COMPOSE_OVERRIDE} css agbot exchange
 
 realclean:  clean
 	-docker volume prune -f
