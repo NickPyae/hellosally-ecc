@@ -1,13 +1,19 @@
 [
     {
         "name":"Lobby-Temp",
-        "dataURL":"http://localhost:49990/data",
+        "dataURL":"http://x.x.x.x:49990/data",
         "profileName": "Temperature-Generator",
         "profileFile": "temperature-generator-profile.yaml"
     },
     {
         "name":"roof-Temp",
-        "dataURL":"http://localhost:49991/data",
+        "dataURL":"http://x.x.x.x:49990/data",
+        "profileName": "Temperature-Generator",
+        "profileFile": "temperature-generator-profile.yaml"
+    },
+    {
+        "name":"Raspberry-Pi-Sensor",
+        "dataURL":"http://x.x.x.x/data",
         "profileName": "Temperature-Generator",
         "profileFile": "temperature-generator-profile.yaml"
     }

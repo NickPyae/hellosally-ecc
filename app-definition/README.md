@@ -83,18 +83,25 @@ And edit `device-service.config.json` with the list of temperature sensor device
 [
     {
         "name":"Lobby-Temp",
-        "dataURL":"http://localhost:49990/data",
+        "dataURL":"http://x.x.x.x:49990/data",
         "profileName": "Temperature-Generator",
         "profileFile": "temperature-generator-profile.yaml"
     },
     {
         "name":"roof-Temp",
-        "dataURL":"http://localhost:49991/data",
+        "dataURL":"http://x.x.x.x:49990/data",
+        "profileName": "Temperature-Generator",
+        "profileFile": "temperature-generator-profile.yaml"
+    },
+    {
+        "name":"Raspberry-Pi-Sensor",
+        "dataURL":"http://x.x.x.x/data",
         "profileName": "Temperature-Generator",
         "profileFile": "temperature-generator-profile.yaml"
     }
 ]
 ```
+Replace `x.x.x.x` with correct IP addresses where your simulators and sensor are running.
 
 ### 3. Generate the hellosally.service.json
 
