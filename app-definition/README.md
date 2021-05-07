@@ -2,7 +2,7 @@
 
 # Pre-requisites
 
-Before installing HelloSally services, ensure Open Horizon was setup following the instructions from [Open Horizon Setup](https://eos2git.cec.lab.emc.com/ISG-Edge/hellosally-ecc/tree/refactor/hellosally-oh#how-to-install-open-horizon-management-hub-and-agent)
+Before installing HelloSally services, ensure Open Horizon was setup following the instructions from [Open Horizon Setup](https://eos2git.cec.lab.emc.com/ISG-Edge/hellosally-ecc#how-to-install-open-horizon-management-hub-and-agent)
 
 Before we deploy any services using hzn CLI, there are two options:
 
@@ -11,7 +11,7 @@ Before we deploy any services using hzn CLI, there are two options:
 
 For Option 1, you can follow below steps to deploy services from Agent VM.
 
-For Option 2, please follow this guide: [Exposing Open Horizon Agent API to Outside](expose-agent-api.md) and come back here to execute below steps to deploy services from Management Hub VM.
+For Option 2, please follow this guide: [Exposing Open Horizon Agent API to Outside](https://eos2git.cec.lab.emc.com/ISG-Edge/hellosally-ecc/blob/main/open-horizon/expose-agent-api.md) and come back here to execute below steps to deploy services from Management Hub VM.
 
 Next we will publish an example EdgeX service to Open Horizon Management hub and then tell the agent to run the service.
 
@@ -39,24 +39,94 @@ Created keys:
         /root/.hzn/keys/service.public.pem
 ```
 
-Publish the `.service.json` definition files to the exchange.
+## Building hellosally.service.json
+
+In order to avoid committing secrets to Git repo, it is required to build the `hellosally.service.json` from the template.  
+This is done in 3 steps:
+1. set the environment variables
+2. edit the device-service.config.json
+3. make the `hellosally.service.json` file.
+
+### 1. set the environment variables
+
+Create a file called  `.env` file:  
+``` bash
+nano .env
+```
+
+And copy the following environment variables with values that correspond to your environment:  
+``` bash
+export KUIPER_READING_NAME=Temperature
+export KUIPER_IP=edgex-kuiper
+export KUIPER_PORT=48075
+export INFLUXDB_IP=x.x.x.x 
+export INFLUXDB_PORT=8086
+export INFLUXDB_TOKEN=YOUR_INFLUXDB_TOKEN
+export INFLUXDB_CLOUD_TOKEN=YOUR_INFLUXDB_CLOUD_TOKEN
+export BUCKET_NAME=hello-sally-frk
+export REDIS_IP=edgex-redis
+export REDIS_PORT=6379
+```
+
+NOTE: Replace all these values with correct values of InfluxDB VM IP, authorization header tokens of InfluxDB and InfluxDB Cloud, bucket name depending on the labs you are deploying these services whether it is HOP or Franklin. Refer to this [Confluence Page](https://confluence.cec.lab.emc.com/pages/viewpage.action?spaceKey=ISGPDE&title=Technical+Specifications) for Physical View of HOP Lab and Franklin Lab to check IP addresses of KUIPER and REDIS services. KUIPER and REDIS services are part of FarEdge ECE. Please, use IP of ECE for both KUIPER and REDIS.
+
+
+### 2. Edit the device service config file
+
+Create a new file `device-service.config.json` by copying the sample file provided:  
+``` bash
+cp device-service.sample-config.json device-service.config.json
+```
+
+And edit `device-service.config.json` with the list of temperature sensor devices available in your environment:  
+``` json
+[
+    {
+        "name":"Lobby-Temp",
+        "dataURL":"http://x.x.x.x:49990/data",
+        "profileName": "Temperature-Generator",
+        "profileFile": "temperature-generator-profile.yaml"
+    },
+    {
+        "name":"roof-Temp",
+        "dataURL":"http://x.x.x.x:49990/data",
+        "profileName": "Temperature-Generator",
+        "profileFile": "temperature-generator-profile.yaml"
+    },
+    {
+        "name":"Raspberry-Pi-Sensor",
+        "dataURL":"http://x.x.x.x/data",
+        "profileName": "Temperature-Generator",
+        "profileFile": "temperature-generator-profile.yaml"
+    }
+]
+```
+Replace `x.x.x.x` with correct IP addresses where your simulators and sensor are running.
+
+### 3. Generate the hellosally.service.json
+
+Once the files `.env` and `device-service.config.json` are ready, build `hellosally.service.json` with the following command:
+
+``` bash
+./makeService.sh
+```
+
+You will find `hellosally.service.json` in the current folder, set with the values corresponding to your environment.
+
+
+## Publishing hello.service.json
+
+Publish the `hellosally.service.json` definition file to the exchange.
 The command will run for a bit, and will pull each container from the container registry so that it can obtain the container digest.
 The digest is recorded in the published service definition. Provide your JFrog Artifactory user name and API Key.
 
-```
-cd app-definition/services
-hzn exchange service publish -P -f redis.service.json
-hzn exchange service publish -P -f core-meta.service.json
-hzn exchange service publish -P -f core-data.service.json
-hzn exchange service publish -P -f core-command.service.json
-hzn exchange service publish -P -f rules-engine.service.json
-hzn exchange service publish -P -f kuiper.service.json
+``` bash
 hzn exchange service publish -P -f hellosally.service.json
 ```
 
 Now check to ensure that the service definition was published and is available in the exchange:
 
-```
+``` bash
 hzn exchange service list
 ```
 
@@ -68,21 +138,9 @@ The above should respond with the following, if successful:
 ]
 ```
 
-Export the following environment variables to host shell environment so that these env variables can be injected into app-init container during runtime.
 
-NOTE: Replace all these values with correct values of kuiper rule engine VM IP, InfluxDB VM IP, authorization header tokens of InfluxDB and InfluxDB Cloud, bucket name as well as Redis VM IP, depending on the labs you are deploying these services whether it is HOP or Franklin. Refer to this [Confluence Page](https://confluence.cec.lab.emc.com/pages/viewpage.action?spaceKey=ISGPDE&title=Technical+Specifications) for Physical View of HOP Lab and Franklin Lab to check IP addresses of KUIPER and REDIS services. KUIPER and REDIS services are part of FarEdge ECE. Please, use IP of ECE for both KUIPER and REDIS.
 
-``` bash
-export KUIPER_IP=x.x.x.x
-export KUIPER_PORT=48075
-export INFLUXDB_IP=x.x.x.x 
-export INFLUXDB_PORT=8086
-export INFLUXDB_TOKEN=YOUR_INFLUXDB_TOKEN
-export INFLUXDB_CLOUD_TOKEN=YOUR_INFLUXDB_CLOUD_TOKEN
-export BUCKET_NAME=hello-sally-frk
-export REDIS_IP=x.x.x.x
-export REDIS_PORT=6379
-```
+# Deploying the services to the node
 
 Open Horizon Agent manages containerized services on their nodes using following mechanisms: 
 
@@ -94,18 +152,18 @@ Open Horizon Agent manages containerized services on their nodes using following
 You can either use one of these approaches to deploy your services to Open Horizon Agent nodes. Please, keep in mind that you cannot use both at the same time. Regarding pattern mechanism, only one pattern can be active one same node. However, you can have multiple deployment policies on same node. 
 
 
-### Deploying services using Pattern
+## Deploying services using Pattern
 
 Publishing a _pattern_ to the exchange.
 A pattern is the easiest way for a node to indicate which services it should run.
 
-```
+``` bash
 hzn exchange pattern publish -f app-definition/pattern/pattern.json
 ```
 
 Now check to ensure the pattern is available:
 
-```
+``` bash
 hzn exchange pattern list
 ```
 
@@ -167,7 +225,7 @@ From Agent VM, run
 hzn unregister -D
 ```
 
-### Deploying services using Deployment Policy
+## Deploying services using Deployment Policy
 
 Register Open Horizon Agent with the hub by providing node policy and user input.
 
@@ -207,4 +265,4 @@ Normally, this takes about 30 to 40 sec to see the agreement list, deploy and ru
 
 # Next
 
-[Exposing Open Horizon Agent API to Outside](expose-agent-api.md).
+[Exposing Open Horizon Agent API to Outside](../open-horizon/expose-agent-api.md).

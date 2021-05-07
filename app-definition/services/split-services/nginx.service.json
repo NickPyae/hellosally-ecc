@@ -1,9 +1,9 @@
 {
     "org": "${HZN_ORG_ID}",
-    "label": "App Init",
-    "description": "HelloSally App Init Service",
+    "label": "nginx",
+    "description": "HelloSally nginx Service",
     "documentation": "",
-    "url": "com.eos2git.cec.lab.emc.hellosally.appinit",
+    "url": "com.eos2git.cec.lab.emc.hellosally.nginx",
     "version": "0.0.1",
     "arch": "amd64",
     "public": false,
@@ -13,7 +13,7 @@
     "deployment": {
       "services": {
         "app-init": {
-          "image": "amaas-eos-mw1.cec.lab.emc.com:5070/hellosally/app-init:0.0.1",
+          "image": "amaas-eos-mw1.cec.lab.emc.com:5070/hellosally/nginx:latest",
           "privileged": false
         }
       }

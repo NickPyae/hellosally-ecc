@@ -2,14 +2,18 @@
 
 ### Create and Persist Environment Variables
 
+Replace all your `YOUR_EXCHANGE_ROOT_PASSWORD` and `YOUR_EXCHANGE_ADMIN_PASSWORD` with correct values you like before exporting them.
+
 ``` bash
+export EXCHANGE_PASSWORD=YOUR_EXCHANGE_ROOT_PASSWORD
+export EXCHANGE_ADMIN_PASSWORD=YOUR_EXCHANGE_ADMIN_PASSWORD
 export MY_IP=`ifconfig | egrep 'inet ' | sed 's/addr://' | awk '{ print $2 }' | egrep -v '^172.|^10.|^127.' | head -1`
 echo "export MY_IP=${MY_IP}" >> ~/.bashrc
 echo "export HZN_ORG_ID=dellsg" >> ~/.bashrc
 echo "export HZN_EXCHANGE_URL=http://${MY_IP}:3090/v1/" >> ~/.bashrc
 echo "export HZN_FSS_CSSURL=http://${MY_IP}:9443" >> ~/.bashrc
-echo "export HZN_EXCHANGE_ROOT_USER_AUTH=root/root:Horizon-Rul3s" >> ~/.bashrc
-echo "export HZN_EXCHANGE_USER_AUTH=admin:adminpw" >> ~/.bashrc
+echo "export HZN_EXCHANGE_ROOT_USER_AUTH=root/root:YOUR_EXCHANGE_ROOT_PASSWORD" >> ~/.bashrc
+echo "export HZN_EXCHANGE_USER_AUTH=admin:YOUR_EXCHANGE_ADMIN_PASSWORD" >> ~/.bashrc
 source ~/.bashrc
 ```
 
@@ -25,24 +29,8 @@ cd open-horizon/scripts
 envsubst '${MY_IP}' < config.json.template > config.json
 ```
 
-NOTE: The following text refers to nodes in the `config.json` file using XPath-like dot notation.
-
-Your IP address for this machine is found at `.horizon.hostname`.
-
-The AgBot's name and token are specified at `.services.agbot.bot`.
-
-The Exchange's root credentials are at `.exchange.root` and `.exchange.password`.
-
-The admin user for your org is at `.exchange.admin.username` , and `.exchange.admin.password`.
-
-The organization is specified at `.horizon.namespace` and `.exchange.org`.
-
-The ECC-GUI is pulled in from the artifactory based docker registry and requires at this point that the user is logged in to the registry
-
-These instructions are assuming, and will be referring to, the default values specified at the nodes listed above.
-
 ### Build and Start the Services
-
+NOTE: The ECC-GUI is pulled in from the artifactory based docker registry and requires at this point that the user is logged in to the registry
 NOTE: I am assuming that you are still in the `open-horizon/scripts` directory.
 
 ``` bash
@@ -75,7 +63,7 @@ curl -u ${HZN_EXCHANGE_ROOT_USER_AUTH} ${HZN_EXCHANGE_URL}admin/version
 ```
 
 ``` bash
-curl --silent -u ${HZN_EXCHANGE_ROOT_USER_AUTH} ${HZN_EXCHANGE_URL}admin/status | jq .
+curl -s -u ${HZN_EXCHANGE_ROOT_USER_AUTH} ${HZN_EXCHANGE_URL}admin/status | jq .
 ```
 
 If all is well, let's create `dellsg` organization and administrative user
@@ -88,7 +76,7 @@ make prime
 If all is well, let's continue by listing the existing Organizations:
 
 ``` bash
-curl --silent -u ${HZN_EXCHANGE_ROOT_USER_AUTH} ${HZN_EXCHANGE_URL}orgs | jq .
+curl -s -u ${HZN_EXCHANGE_ROOT_USER_AUTH} ${HZN_EXCHANGE_URL}orgs | jq .
 ```
 
 The step you just performed created an admin user for your dellsg and also told your new AgBot `agbot1` to listen for Deployment Patterns and Policies from the `dellsg` Organization.
@@ -96,7 +84,7 @@ The step you just performed created an admin user for your dellsg and also told 
 List the current users in `dellsg`:
 
 ``` bash
-curl --silent -sSf -u ${HZN_EXCHANGE_ROOT_USER_AUTH} ${HZN_EXCHANGE_URL}orgs/dellsg/users | jq .
+curl -sSf -u ${HZN_EXCHANGE_ROOT_USER_AUTH} ${HZN_EXCHANGE_URL}orgs/dellsg/users | jq .
 ```
 
 ## Next
