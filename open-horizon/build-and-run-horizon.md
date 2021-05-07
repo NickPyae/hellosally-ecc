@@ -30,7 +30,7 @@ envsubst '${MY_IP}' < config.json.template > config.json
 ```
 
 ### Build and Start the Services
-
+NOTE: The ECC-GUI is pulled in from the artifactory based docker registry and requires at this point that the user is logged in to the registry
 NOTE: I am assuming that you are still in the `open-horizon/scripts` directory.
 
 ``` bash

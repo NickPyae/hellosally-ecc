@@ -85,6 +85,12 @@
       "hznListenIp" : "${MY_IP}",
       "exchangeUserOrg": "dellsg",
       "agentInstallUrl": "https://github.com/open-horizon/anax/releases/latest/download/agent-install.sh"
+    },
+    "eccgui": {
+      "name": "eccgui",
+      "image": "amaas-eos-mw1.cec.lab.emc.com:5070/hellosally/hello-sally-web/main",
+      "tag": "latest",
+      "port": 80
     }
   }
 }
