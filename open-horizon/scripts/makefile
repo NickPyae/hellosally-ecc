@@ -159,7 +159,7 @@ CONFIGS := \
 config: makefile ${CONFIGS}
 
 up: ${DOCKER_COMPOSE} keys config
-	docker-compose up -d
+	chmod 777 -R exchange && docker-compose up -d
 
 prime: # up
 	export \

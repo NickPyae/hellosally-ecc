@@ -38,13 +38,6 @@ make
 make up
 ```
 
-NOTE: `openhorizon/amd64_exchange-api` container will exit due to file permission. To verify this, run `docker ps -a`, you will see that this particular container exited. To fix this issue, run below command in current `open-horizon/scripts` directory
-
-``` bash
-chmod -R 777 exchange
-make up
-```
-
 Install Open Horizon hzn CLI:
 
 Note: We are going to download horizon cli from open-horizon anax repo releases.
