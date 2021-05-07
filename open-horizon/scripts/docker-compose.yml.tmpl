@@ -1,4 +1,4 @@
-version: '3'
+version: '3.8'
 
 ###
 ### VOLUMES
@@ -16,6 +16,7 @@ volumes:
 networks:
   ${HZN_NETWORK}:
     driver: ${HZN_NETWORK_DRIVER}
+    name: ${HZN_NETWORK}
 
 ###
 ### SERVICES
