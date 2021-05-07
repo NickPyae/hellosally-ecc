@@ -57,18 +57,18 @@ nano .env
 And copy the following environment variables with values that correspond to your environment:  
 ``` bash
 export KUIPER_READING_NAME=Temperature
-export KUIPER_IP=x.x.x.x
+export KUIPER_IP=edgex-kuiper
 export KUIPER_PORT=48075
 export INFLUXDB_IP=x.x.x.x 
 export INFLUXDB_PORT=8086
 export INFLUXDB_TOKEN=YOUR_INFLUXDB_TOKEN
 export INFLUXDB_CLOUD_TOKEN=YOUR_INFLUXDB_CLOUD_TOKEN
 export BUCKET_NAME=hello-sally-frk
-export REDIS_IP=x.x.x.x
+export REDIS_IP=edgex-redis
 export REDIS_PORT=6379
 ```
 
-NOTE: Replace all these values with correct values of kuiper rule engine VM IP, InfluxDB VM IP, authorization header tokens of InfluxDB and InfluxDB Cloud, bucket name as well as Redis VM IP, depending on the labs you are deploying these services whether it is HOP or Franklin. Refer to this [Confluence Page](https://confluence.cec.lab.emc.com/pages/viewpage.action?spaceKey=ISGPDE&title=Technical+Specifications) for Physical View of HOP Lab and Franklin Lab to check IP addresses of KUIPER and REDIS services. KUIPER and REDIS services are part of FarEdge ECE. Please, use IP of ECE for both KUIPER and REDIS.
+NOTE: Replace all these values with correct values of InfluxDB VM IP, authorization header tokens of InfluxDB and InfluxDB Cloud, bucket name depending on the labs you are deploying these services whether it is HOP or Franklin. Refer to this [Confluence Page](https://confluence.cec.lab.emc.com/pages/viewpage.action?spaceKey=ISGPDE&title=Technical+Specifications) for Physical View of HOP Lab and Franklin Lab to check IP addresses of KUIPER and REDIS services. KUIPER and REDIS services are part of FarEdge ECE. Please, use IP of ECE for both KUIPER and REDIS.
 
 
 ### 2. Edit the device service config file
