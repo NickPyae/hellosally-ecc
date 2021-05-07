@@ -265,4 +265,4 @@ Normally, this takes about 30 to 40 sec to see the agreement list, deploy and ru
 
 # Next
 
-[Exposing Open Horizon Agent API to Outside](expose-agent-api.md).
+[Exposing Open Horizon Agent API to Outside](../open-horizon/expose-agent-api.md).
