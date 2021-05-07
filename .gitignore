@@ -1,2 +1,3 @@
 .env
 /app-definition/device-service.config.json
+/app-definition/hellosally.service.json
