@@ -88,7 +88,7 @@
     },
     "eccgui": {
       "name": "eccgui",
-      "image": "amaas-eos-mw1.cec.lab.emc.com:5070/hellosally/hello-sally-web",
+      "image": "amaas-eos-mw1.cec.lab.emc.com:5070/hellosally/hello-sally-web/main",
       "tag": "latest",
       "port": 80
     }

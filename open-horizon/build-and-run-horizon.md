@@ -37,6 +37,8 @@ The admin user for your org is at `.exchange.admin.username` , and `.exchange.ad
 
 The organization is specified at `.horizon.namespace` and `.exchange.org`.
 
+The ECC-GUI is pulled in from the artifactory based docker registry and requires at this point that the user is logged in to the registry
+
 These instructions are assuming, and will be referring to, the default values specified at the nodes listed above.
 
 ### Build and Start the Services
